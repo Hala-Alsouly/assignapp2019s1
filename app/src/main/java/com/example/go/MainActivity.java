@@ -1,5 +1,6 @@
 package com.example.go;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -25,7 +26,9 @@ public class MainActivity extends AppCompatActivity {
     public void onClick_VsPlayer(View v){
 
     }
+    // Allow the gamers to check the previous game records
     public void onClick_CheckRecords(View v){
-
+        Intent intent = new Intent(MainActivity.this, CheckRecords.class);
+        startActivity(intent);
     }
 }
