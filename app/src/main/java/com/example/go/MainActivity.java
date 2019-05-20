@@ -21,7 +21,8 @@ public class MainActivity extends AppCompatActivity {
      * Write the onClick for the three buttons
      */
     public void onClick_VsCom(View v){
-
+        Intent intent = new Intent(MainActivity.this, Game.class);
+        startActivity(intent);
     }
     public void onClick_VsPlayer(View v){
 

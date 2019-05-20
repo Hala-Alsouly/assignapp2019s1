@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+   <LinearLayout
+       android:id="@+id/topContent"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:orientation="vertical">
+       <Button
+           android:id="@+id/newGameButten"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:text="New Game"
+           android:textStyle="bold"
+           android:textSize="18sp"
+           android:gravity="center"
+           android:background="@color/BurlyWood" />
+
+       <TextView
+           android:id="@+id/turnOf_text"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:layout_weight="0"
+           android:text="Player"
+           android:paddingBottom="5dp"
+           android:textStyle="bold"
+           android:textSize="18sp"
+           android:gravity="center"
+           android:background="@color/BurlyWood"
+           />
+   </LinearLayout>
+    <LinearLayout
+        android:id="@+id/boardGame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/BurlyWood"
+        android:layout_below="@+id/topContent"
+        >
+
+    </LinearLayout>
+</RelativeLayout>
