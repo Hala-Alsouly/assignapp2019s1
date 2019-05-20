@@ -19,7 +19,7 @@
            android:textStyle="bold"
            android:textSize="18sp"
            android:gravity="center"
-           android:background="@color/BurlyWood" />
+           android:background="@color/SaddleBrown" />
 
        <TextView
            android:id="@+id/turnOf_text"
