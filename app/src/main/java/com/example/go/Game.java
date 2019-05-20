@@ -1,7 +1,6 @@
 package com.example.go;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -16,7 +15,7 @@ import android.widget.Toast;
 
 import java.util.Random;
 
-public class Game extends AppCompatActivity implements View.OnClickListener {
+public class Game extends AppCompatActivity  {
     final static int boardSize=12;
     private Context context;
     //Array of cell
@@ -73,6 +72,9 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
                 ivCell[i][j].setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        if (valueCell[xmove][ymove]==0){
+
+                        }
                         if (player_turn==1|| !isClicked){
                             isClicked=true;
                             xmove=x;
@@ -104,13 +106,13 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
     }
     private void player_turn(){
         Toast.makeText(context, "Your Turn!", Toast.LENGTH_SHORT).show();
-        turnOf_text.setText("Your Turn!");
+        //turnOf_text.setText("Your Turn!");
         isClicked=false;
 
     }
     private void Ai_turn(){
-        Toast.makeText(context, "Computer Turn!", Toast.LENGTH_SHORT).show();
-        turnOf_text.setText("Computer Turn!");
+        //Toast.makeText(context, "Computer Turn!", Toast.LENGTH_SHORT).show();
+        //turnOf_text.setText("Computer Turn!");
         if (first_move){
             xmove=new Random().nextInt(boardSize);
             ymove=new Random().nextInt(boardSize);
@@ -122,9 +124,103 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
     }
     private void move(){
         ivCell[xmove][ymove].setImageDrawable(drawCell[player_turn]);
-        player_turn=(player_turn % 2)+1;
+        valueCell[xmove][ymove]=player_turn;
+        if (isBoardFull()){
+            Toast.makeText(context, "Draw!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        else
+        {
+            if (isWinning()){
+                if (winner==1){
+                    Toast.makeText(context, "You Win!", Toast.LENGTH_SHORT).show();
+                    turnOf_text.setText("You Win!");
+                }
+                else {
+                    Toast.makeText(context, "You Lose!", Toast.LENGTH_SHORT).show();
+                    turnOf_text.setText("You Lose!");
+                }
+                return;
+            }
+        }
+        if (player_turn==1){
+            player_turn=2;
+            Ai_turn();
+        }else {
+            player_turn=1;
+            player_turn();
+        }
+
 
     }
+
+    private boolean isBoardFull() {
+        for (int i = 0; i < boardSize; i++) {
+            for (int j = 0; j < boardSize; j++) {
+                if (valueCell[i][j]==0)
+                    return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean isWinning() {
+        if(winner!=0)
+            return true;
+        VectorEnd(xmove,0,0,1,xmove,ymove);
+        return false;
+    }
+
+    private void VectorEnd(int xx, int yy, int vx, int vy, int rx, int ry) {
+        //check the row based on vector(vx,vy)
+        if(winner!=0)
+            return;
+        int i,j;
+        int xbelow=rx-4*vx;
+        int ybelow=ry-4*vy;
+        int xabove=rx+4*vx;
+        int yabove=ry+4*vy;
+        String st="";
+        i=xx;
+        j=yy;
+        while (!inside(i,xbelow,xabove) || !inside(j,ybelow,yabove)){
+            i+=vx;
+            j+=vy;
+        }
+        while (true){
+            st += String.valueOf(valueCell[i][j]);
+            if (st.length()==5){
+                EvalEnd(st);
+                st=st.substring(1,5);
+
+            }
+            i+=vx;
+            j+=vy;
+            if(!inBoard(i,j)|| !inside(i,xbelow,xabove) || !inside(j,ybelow,yabove)||winner!=0){
+                break;
+            }
+        }
+
+    }
+
+    private boolean inBoard(int i, int j) {
+        if (i<0 || i>=boardSize || j<0 ||j>=boardSize)
+            return false;
+        return true;
+    }
+
+    private void EvalEnd(String st) {
+        switch (st){
+            case "11111":winner=1; break;
+            case "22222":winner=2;break;
+            default:break;
+        }
+    }
+
+    private boolean inside(int i, int xbelow, int xabove) {
+        return(i-xbelow)*(i-xabove)<=0;
+    }
+
     private void start_game() {
         player_turn= new Random().nextInt(2)+1;
         if (player_turn==1)
@@ -133,8 +229,4 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
 
     }
 
-    @Override
-    public void onClick(View v) {
-
-    }
 }
