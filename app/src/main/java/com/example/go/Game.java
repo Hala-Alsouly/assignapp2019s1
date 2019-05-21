@@ -41,10 +41,13 @@ public class Game extends AppCompatActivity  {
             public void onClick(View v) {
                 initialize_board();
                 start_game();
+                turnOf_text.setText("");
             }
         });
         loadResources();
         BoardGame();
+        initialize_board();
+        start_game();
 
     }
     private void loadResources(){
@@ -75,8 +78,8 @@ public class Game extends AppCompatActivity  {
                         if (valueCell[xmove][ymove]==0){
 
                         }
-                        if (player_turn==1|| !isClicked){
-                            isClicked=true;
+                        if (player_turn==1){
+                            //isClicked=true;
                             xmove=x;
                             ymove=y;
                             move();
@@ -105,9 +108,9 @@ public class Game extends AppCompatActivity  {
         }
     }
     private void player_turn(){
-        Toast.makeText(context, "Your Turn!", Toast.LENGTH_SHORT).show();
-        //turnOf_text.setText("Your Turn!");
-        isClicked=false;
+        //Toast.makeText(context, "Your Turn!", Toast.LENGTH_SHORT).show();
+        turnOf_text.setText("Your Turn!");
+        //isClicked=false;
 
     }
     private void Ai_turn(){
@@ -116,6 +119,7 @@ public class Game extends AppCompatActivity  {
         if (first_move){
             xmove=new Random().nextInt(boardSize);
             ymove=new Random().nextInt(boardSize);
+            //first_move=false;
             move();
         }else{
             //minimax
@@ -123,33 +127,36 @@ public class Game extends AppCompatActivity  {
 
     }
     private void move(){
-        ivCell[xmove][ymove].setImageDrawable(drawCell[player_turn]);
-        valueCell[xmove][ymove]=player_turn;
-        if (isBoardFull()){
-            Toast.makeText(context, "Draw!", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        else
-        {
-            if (isWinning()){
-                if (winner==1){
-                    Toast.makeText(context, "You Win!", Toast.LENGTH_SHORT).show();
-                    turnOf_text.setText("You Win!");
-                }
-                else {
-                    Toast.makeText(context, "You Lose!", Toast.LENGTH_SHORT).show();
-                    turnOf_text.setText("You Lose!");
-                }
+
+        if (valueCell[xmove][ymove]==0) {
+            ivCell[xmove][ymove].setImageDrawable(drawCell[player_turn]);
+            valueCell[xmove][ymove] = player_turn;
+            if (isBoardFull()) {
+                Toast.makeText(context, "Draw!", Toast.LENGTH_SHORT).show();
                 return;
+            } else {
+                if (isWinning()) {
+                    if (winner == 1) {
+                        Toast.makeText(context, "You Win!", Toast.LENGTH_SHORT).show();
+                        turnOf_text.setText("You Win!");
+                    } else {
+                        Toast.makeText(context, "You Lose!", Toast.LENGTH_SHORT).show();
+                        turnOf_text.setText("You Lose!");
+                    }
+                    return;
+                }
             }
-        }
-        if (player_turn==1){
-            player_turn=2;
-            Ai_turn();
-        }else {
-            player_turn=1;
-            player_turn();
-        }
+            if (player_turn == 1) {
+                player_turn = 2;
+                Ai_turn();
+            } else if (player_turn == 2) {
+                player_turn = 1;
+                player_turn();
+            }
+        }else
+            {Toast.makeText(context, "Choose another position!", Toast.LENGTH_SHORT).show();
+        return;
+            }
 
 
     }
@@ -168,6 +175,10 @@ public class Game extends AppCompatActivity  {
         if(winner!=0)
             return true;
         VectorEnd(xmove,0,0,1,xmove,ymove);
+        VectorEnd(0,ymove,1,0,xmove,ymove);
+        VectorEnd(xmove,ymove,1,1,xmove,ymove);
+
+
         return false;
     }
 
@@ -188,6 +199,7 @@ public class Game extends AppCompatActivity  {
             j+=vy;
         }
         while (true){
+            System.out.println(st);
             st += String.valueOf(valueCell[i][j]);
             if (st.length()==5){
                 EvalEnd(st);
@@ -218,13 +230,17 @@ public class Game extends AppCompatActivity  {
     }
 
     private boolean inside(int i, int xbelow, int xabove) {
+
         return(i-xbelow)*(i-xabove)<=0;
     }
 
     private void start_game() {
         player_turn= new Random().nextInt(2)+1;
-        if (player_turn==1)
+        if (player_turn==1){
+            //first_move=false;
             player_turn();
+        }
+
         else Ai_turn();
 
     }
