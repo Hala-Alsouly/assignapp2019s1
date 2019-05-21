@@ -18,16 +18,18 @@ import java.util.Random;
 public class Game extends AppCompatActivity  {
     final static int boardSize=12;
     private Context context;
-    //Array of cell
+    //Array of cell to draw the board
     private ImageView[][] ivCell= new ImageView[boardSize][boardSize] ;
+    //Array to place the drawable (background board, placments)
     private Drawable[] drawCell=new Drawable[4] ;
+    //Save the values for all players
     private int[][] valueCell=new int[boardSize][boardSize] ;
     private int winner;
     private boolean first_move;
     private int xmove, ymove;
     private int player_turn;
-    private boolean isClicked;
-    private TextView turnOf_text;
+    //private boolean isClicked;
+    private TextView comment_text;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,68 +37,75 @@ public class Game extends AppCompatActivity  {
         setContentView(R.layout.game_main);
         context=this;
         Button newGameButten= findViewById(R.id.newGameButten);
-        turnOf_text=findViewById(R.id.turnOf_text);
+        comment_text=findViewById(R.id.comment_text);
         newGameButten.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //Start a new game
                 initialize_board();
                 start_game();
-                turnOf_text.setText("");
+                comment_text.setText("");
             }
         });
         loadResources();
         BoardGame();
+        //Start a new game
         initialize_board();
         start_game();
 
     }
+    //Set board contents
     private void loadResources(){
-        drawCell[0]=null;
+        drawCell[0]=context.getResources().getDrawable(R.drawable.cell);//background
         drawCell[1]=context.getResources().getDrawable(R.drawable.black);
         drawCell[2]=context.getResources().getDrawable(R.drawable.white);
-        drawCell[3]=context.getResources().getDrawable(R.drawable.cell);
     }
+
+    //prepare the game board
     private void BoardGame(){
+        //Get the cell size depends on screen size
         int cellSize=Math.round(ScreenWidth()/boardSize);
+        //the size of the row which is a linearLayout
         LinearLayout.LayoutParams lnrow=new LinearLayout.LayoutParams(cellSize*boardSize, cellSize);
+        //the size of the cell will be a linear layout
         LinearLayout.LayoutParams lnCell=new LinearLayout.LayoutParams(cellSize, cellSize);
-        //LinearLayout.LayoutParams lnCell=new LinearLayout.LayoutParams(cellSize,cellSize);
         LinearLayout lBoeardGame=(LinearLayout)findViewById(R.id.boardGame);
 
         for (int i=0; i<boardSize;i++){
             LinearLayout linRow=new LinearLayout(context);
-            //drow row
             for (int j=0; j<boardSize;j++){
                 ivCell[i][j]=new ImageView(context);
-                //drow cell
-                ivCell[i][j].setBackground(drawCell[3]);
+                ivCell[i][j].setBackground(drawCell[0]);
                 final int x=i;
                 final int y=j;
+                //On click listener for each cell on the board
                 ivCell[i][j].setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (valueCell[xmove][ymove]==0){
-
-                        }
                         if (player_turn==1){
-                            //isClicked=true;
                             xmove=x;
                             ymove=y;
                             move();
                         }
                     }
                 });
+                //add each cell to the view
                 linRow.addView(ivCell[i][j],lnCell);
             }
+            //add each row to the view
             lBoeardGame.addView(linRow,lnrow);
         }
     }
+
+    //get screen width
     private float ScreenWidth(){
         Resources resources= context.getResources();
         DisplayMetrics dm=resources.getDisplayMetrics();
         return dm.widthPixels;
 
     }
+
+    //initialize the game board and reset every thing
     private void initialize_board(){
         first_move=true;
         winner=0;
@@ -107,15 +116,19 @@ public class Game extends AppCompatActivity  {
             }
         }
     }
+
+
     private void player_turn(){
         //Toast.makeText(context, "Your Turn!", Toast.LENGTH_SHORT).show();
-        turnOf_text.setText("Your Turn!");
+        comment_text.setText("Your Turn!");
         //isClicked=false;
 
     }
+
+    //AI player
     private void Ai_turn(){
         //Toast.makeText(context, "Computer Turn!", Toast.LENGTH_SHORT).show();
-        //turnOf_text.setText("Computer Turn!");
+        //comment_text.setText("Computer Turn!");
         if (first_move){
             xmove=new Random().nextInt(boardSize);
             ymove=new Random().nextInt(boardSize);
@@ -126,9 +139,11 @@ public class Game extends AppCompatActivity  {
         }
 
     }
+
+    //Set movement
     private void move(){
 
-        if (valueCell[xmove][ymove]==0) {
+        if (valueCell[xmove][ymove]==0 && winner==0) {
             ivCell[xmove][ymove].setImageDrawable(drawCell[player_turn]);
             valueCell[xmove][ymove] = player_turn;
             if (isBoardFull()) {
@@ -138,10 +153,10 @@ public class Game extends AppCompatActivity  {
                 if (isWinning()) {
                     if (winner == 1) {
                         Toast.makeText(context, "You Win!", Toast.LENGTH_SHORT).show();
-                        turnOf_text.setText("You Win!");
+                        comment_text.setText("You Win!");
                     } else {
-                        Toast.makeText(context, "You Lose!", Toast.LENGTH_SHORT).show();
-                        turnOf_text.setText("You Lose!");
+                        Toast.makeText(context, "You Lost!", Toast.LENGTH_SHORT).show();
+                        comment_text.setText("You Lost!");
                     }
                     return;
                 }
@@ -149,7 +164,7 @@ public class Game extends AppCompatActivity  {
             if (player_turn == 1) {
                 player_turn = 2;
                 Ai_turn();
-            } else if (player_turn == 2) {
+            } else  {
                 player_turn = 1;
                 player_turn();
             }
@@ -188,8 +203,6 @@ public class Game extends AppCompatActivity  {
             return true;
         else return false;
 
-
-        //return false;
     }
 
     private void VectorEnd(int xx, int yy, int vx, int vy, int rx, int ry) {

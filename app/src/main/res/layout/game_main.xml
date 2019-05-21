@@ -22,7 +22,7 @@
            android:background="@color/SaddleBrown" />
 
        <TextView
-           android:id="@+id/turnOf_text"
+           android:id="@+id/comment_text"
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
            android:layout_weight="0"
