@@ -20,7 +20,7 @@ import java.util.Set;
 
 
 public class Evaluation {
-    private Set<int[]> availablePositions;
+    private Set<int[]> availablePositions = new HashSet<>();
     private Set<int[]> playerPositions = new HashSet<>();
     private Set<int[]> aiPositions = new HashSet<>();
     
@@ -76,8 +76,8 @@ public class Evaluation {
             return 10;
         else if (num_Free1 >= 1)
             return 1;
-        else
-            return 0;         
+        Log.i("check ai","1:" + num_Free1 +", " +"2:" + num_Free2 +", ");
+        return 0;
     }
 
     public int getScoreForAi(int[] position){
@@ -220,13 +220,20 @@ public class Evaluation {
         counts[3] = num_diagonal_right_up;
 
         // give the score if place the piece in this way
-
+        Log.i("counts", num_vertical + ", " + num_horizontal + ", " + num_diagonal_left_up + ", " + num_diagonal_right_up);
         return scoreHelper(isFrees, counts);
     }
 
     // Constructor, it should contain all positions at the beginning
-    public Evaluation(Set positions){
-        availablePositions = positions;
+    public Evaluation(){
+        int[] position = new int[2];
+        for (int i = 0; i < 12; i++){
+            for (int j =0; j < 12; j++){
+                position[0] = i;
+                position[1] = j;
+                availablePositions.add(position);
+            }
+        }
     }
     // setters and getters
     public void setPlayerPosition(int[] position){
