@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -13,7 +14,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
 
 public class Game extends AppCompatActivity  {
     final static int boardSize=12;
@@ -28,6 +31,10 @@ public class Game extends AppCompatActivity  {
     private int player_turn;
     private boolean isClicked;
     private TextView turnOf_text;
+
+    //!!!!!!!!!!!!!!!!!! Jun
+    private Evaluation evaluation;
+    //Yang!!!!!!!!!!!!!!!!!!
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,12 +104,26 @@ public class Game extends AppCompatActivity  {
     private void initialize_board(){
         first_move=true;
         winner=0;
+
+        //!!!!!!!!!!!!!!!!!! Jun
+        Set<int[]> positions = new HashSet<>();
+        //Yang!!!!!!!!!!!!!!!!!!
+
         for (int i = 0; i < boardSize; i++) {
             for (int j = 0; j < boardSize; j++) {
                 ivCell[i][j].setImageDrawable(drawCell[0]);
                 valueCell[i][j]=0;
+
+                //!!!!!!!!!!!!!!!!!! Jun
+                int[] position = {i, j};
+                positions.add(position);
+                //Yang!!!!!!!!!!!!!!!!!!
             }
         }
+
+        //!!!!!!!!!!!!!!!!!! Jun
+        evaluation = new Evaluation(positions);
+        //Yang!!!!!!!!!!!!!!!!!!
     }
     private void player_turn(){
         Toast.makeText(context, "Your Turn!", Toast.LENGTH_SHORT).show();
@@ -116,15 +137,37 @@ public class Game extends AppCompatActivity  {
         if (first_move){
             xmove=new Random().nextInt(boardSize);
             ymove=new Random().nextInt(boardSize);
+
+            //!!!!!!!!!!!!!!!!!! Jun
+            Log.i("bad moves", "(x: " + xmove + ")  (y: " +  ymove +")");
+            first_move = false;
+            int[] position = {xmove, ymove};
+            evaluation.setAiPosition(position);
+            //Yang!!!!!!!!!!!!!!!!!!
+
             move();
         }else{
-            //minimax
-        }
 
+            //!!!!!!!!!!!!!!!!!! Jun
+            int[] position = evaluation.choosePositiveForAi();
+            xmove = position[0];
+            ymove = position[1];
+            evaluation.setAiPosition(position);
+            Log.i("check ai", "(x: " + xmove + ")  (y: " +  ymove +")");
+            move();
+            //Yang!!!!!!!!!!!!!!!!!!
+        }
     }
+
     private void move(){
         ivCell[xmove][ymove].setImageDrawable(drawCell[player_turn]);
         valueCell[xmove][ymove]=player_turn;
+
+        //!!!!!!!!!!!!!!!!!! Jun
+        int[] position = {xmove, ymove};
+        evaluation.setPlayerPosition(position);
+        //Yang!!!!!!!!!!!!!!!!!!
+
         if (isBoardFull()){
             Toast.makeText(context, "Draw!", Toast.LENGTH_SHORT).show();
             return;
