@@ -53,7 +53,6 @@ public class Game extends AppCompatActivity  {
                                               @Override
                                               public void onClick(View v) {
                                                   Intent intent = new Intent(Game.this,MainActivity.class);
-                                                  //intent.putExtra("NOTE", textNote.getText().toString());
                                                   startActivity(intent);
                                               }
                                           }
