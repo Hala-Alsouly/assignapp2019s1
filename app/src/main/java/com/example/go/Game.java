@@ -1,6 +1,7 @@
 package com.example.go;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -37,6 +38,7 @@ public class Game extends AppCompatActivity  {
         setContentView(R.layout.game_main);
         context=this;
         Button newGameButten= findViewById(R.id.newGameButten);
+        Button backMenuButten=findViewById(R.id.menuButten);
         comment_text=findViewById(R.id.comment_text);
         newGameButten.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -47,6 +49,15 @@ public class Game extends AppCompatActivity  {
                 comment_text.setText("");
             }
         });
+        backMenuButten.setOnClickListener(new View.OnClickListener() {
+                                              @Override
+                                              public void onClick(View v) {
+                                                  Intent intent = new Intent(Game.this,MainActivity.class);
+                                                  //intent.putExtra("NOTE", textNote.getText().toString());
+                                                  startActivity(intent);
+                                              }
+                                          }
+        );
         loadResources();
         BoardGame();
         //Start a new game
@@ -168,7 +179,9 @@ public class Game extends AppCompatActivity  {
                 player_turn = 1;
                 player_turn();
             }
-        }else
+        }else if(winner!=0)
+        return;
+        else
             {Toast.makeText(context, "Choose another position!", Toast.LENGTH_SHORT).show();
         //return;
             }

@@ -11,15 +11,33 @@
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
        android:orientation="vertical">
-       <Button
-           android:id="@+id/newGameButten"
+       <LinearLayout
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
-           android:text="New Game"
-           android:textStyle="bold"
-           android:textSize="18sp"
-           android:gravity="center"
-           android:background="@color/SaddleBrown" />
+           android:orientation="horizontal">
+           <Button
+               android:id="@+id/newGameButten"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:text="New Game"
+               android:textStyle="bold"
+               android:textSize="18sp"
+               android:gravity="center"
+               android:layout_weight="1"
+               android:background="@color/SaddleBrown" />
+           <Button
+               android:id="@+id/menuButten"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:text="Main Menu"
+               android:textStyle="bold"
+               android:textSize="18sp"
+               android:gravity="center"
+               android:layout_weight="1"
+
+               android:background="@color/SaddleBrown" />
+       </LinearLayout>
+
 
        <TextView
            android:id="@+id/comment_text"
