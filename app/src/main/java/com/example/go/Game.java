@@ -155,7 +155,7 @@ public class Game extends AppCompatActivity  {
             }
         }else
             {Toast.makeText(context, "Choose another position!", Toast.LENGTH_SHORT).show();
-        return;
+        //return;
             }
 
 
@@ -176,10 +176,20 @@ public class Game extends AppCompatActivity  {
             return true;
         VectorEnd(xmove,0,0,1,xmove,ymove);
         VectorEnd(0,ymove,1,0,xmove,ymove);
-        VectorEnd(xmove,ymove,1,1,xmove,ymove);
+        if(xmove+ymove>=boardSize-1)
+            VectorEnd(boardSize-1,xmove+ymove-boardSize+1,-1,1,xmove,ymove);
+        else VectorEnd(xmove+ymove,0,-1,1,xmove,ymove);
+
+        if(xmove<=ymove)
+            VectorEnd(xmove-ymove+boardSize-1,boardSize-1,-1,-1,xmove,ymove);
+        else VectorEnd(boardSize-1,boardSize-1-(xmove-ymove),-1,-1,xmove,ymove);
+
+        if(winner!=0)
+            return true;
+        else return false;
 
 
-        return false;
+        //return false;
     }
 
     private void VectorEnd(int xx, int yy, int vx, int vy, int rx, int ry) {
