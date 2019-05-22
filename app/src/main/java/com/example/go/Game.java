@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -32,6 +33,8 @@ public class Game extends AppCompatActivity  {
     //private boolean isClicked;
     private TextView comment_text;
 
+    private Evaluation evaluation = new Evaluation();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +48,7 @@ public class Game extends AppCompatActivity  {
             public void onClick(View v) {
                 //Start a new game
                 initialize_board();
+                evaluation = new Evaluation();
                 start_game();
                 comment_text.setText("");
             }
@@ -95,6 +99,21 @@ public class Game extends AppCompatActivity  {
                         if (player_turn==1){
                             xmove=x;
                             ymove=y;
+
+
+                            String x = "", y = "";
+                            if (xmove < 10)
+                                 x = "0" + xmove;
+                            else x = String.valueOf(xmove);
+                            if (ymove < 10)
+                                y = "0" + ymove;
+                            else y = String.valueOf(ymove);
+                            if (evaluation.getAvailablePositions().contains(x+y)){
+                                evaluation.addPlayerPosition(x + y);
+                                Log.i("counts", "player size: " + evaluation.getPlayerPositions().size());
+                                Log.i("counts", "all size: " + evaluation.getAvailablePositions().size());
+                            }
+
                             move();
                         }
                     }
@@ -142,12 +161,20 @@ public class Game extends AppCompatActivity  {
         if (first_move){
             xmove=new Random().nextInt(boardSize);
             ymove=new Random().nextInt(boardSize);
-            //first_move=false;
+            first_move=false;
+
+            evaluation.addAiPosition(evaluation.positionToString(xmove, ymove));
+            Log.i("ai", "size  " + evaluation.getAiPositions().size() + "");
+
             move();
         }else{
-            //minimax
+            String move = evaluation.choosePositionForAi();
+            xmove = Integer.valueOf(move.substring(0 ,2));
+            ymove = Integer.valueOf(move.substring(2 ,4));
+            evaluation.addAiPosition(move);
+            Log.i("ai", "size  " + evaluation.getAiPositions().size() + "");
+            move();
         }
-
     }
 
     //Set movement
