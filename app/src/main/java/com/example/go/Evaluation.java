@@ -131,6 +131,16 @@ public class Evaluation {
         aiPositions.add(position);
         availablePositions.remove(position);
     }
+    public void addAvailablePosition(String position){
+        if (aiPositions.contains(position)){
+            aiPositions.remove(position);
+            availablePositions.add(position);
+        }
+        else if (playerPositions.contains(position)){
+            playerPositions.remove(position);
+            availablePositions.add(position);
+        }
+    }
     public Set getAvailablePositions(){
         return availablePositions;
     }
@@ -147,52 +157,86 @@ public class Evaluation {
         int x = Integer.parseInt(position.substring(0, 2));
         int y = Integer.parseInt(position.substring(2, 4));
         String vertical = "";
+        String vertical_other = "";
         for (int i = 4; i > 0; i--){
             if (x - i >= 0){
                 String p = positionToString(x - i, y);
-                if (availablePositions.contains(p))
+                if (availablePositions.contains(p)){
                     vertical += "+";
-                else if (me.contains(p))
+                    vertical_other += "+";
+                }
+
+                else if (me.contains(p)){
                     vertical += "0";
-                else if (other.contains(p))
+                    vertical_other += "A";
+                }
+
+                else if (other.contains(p)){
                     vertical += "A";
+                    vertical_other += "0";
+                }
+
             }
         }
         vertical += "0";
+        vertical_other += "0";
         for (int i = 1; i <= 4; i++){
             if (x + i < 12){
                 String p = positionToString(x + i, y);
-                if (availablePositions.contains(p))
+                if (availablePositions.contains(p)){
                     vertical += "+";
-                else if (me.contains(p))
+                    vertical_other += "+";
+                }
+                else if (me.contains(p)){
                     vertical += "0";
-                else if (other.contains(p))
+                    vertical_other += "A";
+                }
+
+                else if (other.contains(p)){
                     vertical += "A";
+                    vertical_other += "0";
+                }
             }
         }
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
         String horizontal = "";
+        String horizontal_other = "";
         for (int i = 4; i > 0; i--){
             if (y - i >= 0){
                 String p = positionToString(x, y  - i);
-                if (availablePositions.contains(p))
+                if (availablePositions.contains(p)){
                     horizontal += "+";
-                else if (me.contains(p))
+                    horizontal_other += "+";
+                }
+
+                else if (me.contains(p)){
                     horizontal += "0";
-                else if (other.contains(p))
+                    horizontal_other += "A";
+                }
+
+                else if (other.contains(p)){
                     horizontal += "A";
+                    horizontal_other += "0";
+                }
             }
         }
         horizontal += "0";
+        horizontal_other += "0";
         for (int i = 1; i <= 4; i++){
             if (y + i < 12){
                 String p = positionToString(x, y  + i);
-                if (availablePositions.contains(p))
+                if (availablePositions.contains(p)){
                     horizontal += "+";
-                else if (me.contains(p))
+                    horizontal_other += "+";
+                }
+                else if (me.contains(p)){
                     horizontal += "0";
-                else if (other.contains(p))
+                    horizontal_other += "A";
+                }
+                else if (other.contains(p)){
                     horizontal += "A";
+                    horizontal_other += "0";
+                }
             }
         }
 
@@ -200,57 +244,87 @@ public class Evaluation {
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
         //diagonal left_up -> right_down
         String diagonal_left_up = "";
+        String diagonal_left_up_other = "";
         for (int i = 4; i > 0; i--){
             if (x - i >= 0 && y - i >= 0){
                 String p = positionToString(x - i, y  - i);
-                if (availablePositions.contains(p))
+                if (availablePositions.contains(p)){
                     diagonal_left_up += "+";
-                else if (me.contains(p))
+                    diagonal_left_up_other += "+";
+                }
+                else if (me.contains(p)){
                     diagonal_left_up += "0";
-                else if (other.contains(p))
+                    diagonal_left_up_other += "A";
+                }
+                else if (other.contains(p)){
                     diagonal_left_up += "A";
+                    diagonal_left_up_other += "0";
+                }
             }
         }
         diagonal_left_up += "0";
+        diagonal_left_up_other += "0";
         for (int i = 1; i <= 4; i++){
             if (x + i < 12 && y + i < 12){
                 String p = positionToString(x + i, y  + i);
-                if (availablePositions.contains(p))
+                if (availablePositions.contains(p)){
                     diagonal_left_up += "+";
-                else if (me.contains(p))
+                    diagonal_left_up_other += "+";
+                }
+                else if (me.contains(p)){
                     diagonal_left_up += "0";
-                else if (other.contains(p))
+                    diagonal_left_up_other += "A";
+                }
+                else if (other.contains(p)){
                     diagonal_left_up += "A";
+                    diagonal_left_up_other += "0";
+                }
             }
         }
 
         /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
         //diagonal left_up -> right_down
         String diagonal_right_up = "";
+        String diagonal_right_up_other = "";
         for (int i = 4; i > 0; i--){
             if (x - i >= 0 && y + i < 12){
                 String p = positionToString(x - i, y  + i);
-                if (availablePositions.contains(p))
+                if (availablePositions.contains(p)){
                     diagonal_right_up += "+";
-                else if (me.contains(p))
+                    diagonal_right_up_other += "+";
+                }
+                else if (me.contains(p)){
                     diagonal_right_up += "0";
-                else if (other.contains(p))
+                    diagonal_right_up_other += "A";
+                }
+                else if (other.contains(p)){
                     diagonal_right_up += "A";
+                    diagonal_right_up_other += "0";
+                }
+
             }
         }
         diagonal_right_up += "0";
+        diagonal_right_up_other += "0";
         for (int i = 1; i <= 4; i++){
             if (x + i < 12 && y - i >= 0){
                 String p = positionToString(x + i, y  - i);
-                if (availablePositions.contains(p))
+                if (availablePositions.contains(p)){
                     diagonal_right_up += "+";
-                else if (me.contains(p))
+                    diagonal_right_up_other += "+";
+                }
+                else if (me.contains(p)){
                     diagonal_right_up += "0";
-                else if (other.contains(p))
+                    diagonal_right_up_other += "A";
+                }
+                else if (other.contains(p)){
                     diagonal_right_up += "A";
+                    diagonal_right_up_other += "0";
+                }
             }
         }
         String[] lines = {horizontal, vertical, diagonal_left_up, diagonal_right_up};
+        String[] lines_other = {horizontal_other, vertical_other, diagonal_left_up_other, diagonal_right_up_other};
         int score = 0;
         for (String line : lines){
             if (line.contains(pattern_50000)){
@@ -318,6 +392,72 @@ public class Evaluation {
                 continue;
             }
         }
+        for (String line : lines_other){
+            if (line.contains(pattern_50000)){
+                score += 10000;
+                continue;
+            }
+            else if (line.contains(pattern_4320)){
+                score += 1320;
+                continue;
+            }
+            else if (line.contains(pattern_720_01)){
+                score += 320;
+                continue;
+            }
+            else if (line.contains(pattern_720_02)){
+                score += 320;
+                continue;
+            }
+            else if (line.contains(pattern_720_03)){
+                score += 320;
+                continue;
+            }
+            else if (line.contains(pattern_720_04)){
+                score += 320;
+                continue;
+            }
+            else if (line.contains(pattern_720_05)){
+                score += 320;
+                continue;
+            }
+            else if (line.contains(pattern_720_06)){
+                score += 320;
+                continue;
+            }
+            else if (line.contains(pattern_720_07)){
+                score += 320;
+                continue;
+            }
+            else if (line.contains(pattern_720_08)){
+                score += 320;
+                continue;
+            }
+            else if (line.contains(pattern_720_09)){
+                score += 320;
+                continue;
+            }
+            else if (line.contains(pattern_120_01)){
+                score += 320;
+                continue;
+            }
+            else if (line.contains(pattern_120_02)){
+                score += 320;
+                continue;
+            }
+            else if (line.contains(pattern_120_03)){
+                score += 320;
+                continue;
+            }
+            else if (line.contains(pattern_20_01)){
+                score += 2;
+                continue;
+            }
+            else if (line.contains(pattern_20_02)){
+                score += 2;
+                continue;
+            }
+        }
         return score;
     }
 
@@ -340,6 +480,24 @@ public class Evaluation {
     }
 
 
+//    public String maximize(int current_depth, int alpha, int beta,
+//                           HashSet<String> avail_pos, HashSet<String> ai_pos, HashSet<String> player_pos){
+//        int value;
+//        for (String position : avail_pos){
+//            value = scoreCalculator()
+//        }
+//    }
+//
+//    public String minimize(int current_depth, int alpha, int beta,
+//                           HashSet<String> avail_pos, HashSet<String> ai_pos, HashSet<String> player_pos){
+//        int min_value = Integer.MIN_VALUE;
+//        for (String position : avail_pos){
+//            min_value =
+//        }
+//
+//    }
+
+
 
     public String positionToString(int x, int y){
         String xx = "", yy = "";
@@ -354,174 +512,4 @@ public class Evaluation {
         return xx + yy;
     }
 
-
-
-//    public int getScoreForAi(String position){
-//        boolean[][] isFrees = new boolean[4][2];
-//        int[] counts = new int[4];
-//
-//        int x = Integer.parseInt(position.substring(0, 2));
-//        int y = Integer.parseInt(position.substring(2, 4));
-//        System.out.println(x + ", " + y);
-//        int total_score = 0;
-//
-//        // check vertical line
-//        // check up
-//        boolean isUpFree = false;
-//        boolean isDownFree = false;
-//        int num_vertical = 1;
-//        String pos = "";
-//        for (int i = 1; i <= 4; i++){
-//            if (x - i >= 0){
-//                pos = positionToString(x - i, y);
-//                if (aiPositions.contains(pos)){
-//                    num_vertical++;
-//                }else{
-//                    if (availablePositions.contains(pos)){
-//                        isUpFree = true;
-//                    }
-//                    break;
-//                }
-//            }else
-//                break;
-//        }
-//        // check down
-//        for (int i = 1; i <= 4; i++){
-//            if (x + i < 12){
-//                pos = positionToString(x + i, y);
-//                if (aiPositions.contains(pos)){
-//                    num_vertical++;
-//                }else{
-//                    if (availablePositions.contains(pos)){
-//                        isDownFree = true;
-//                    }
-//                    break;
-//                }
-//            }else
-//                break;
-//        }
-//        isFrees[0][0] = isUpFree;
-//        isFrees[0][1] = isDownFree;
-//        counts[0] = num_vertical;
-//
-//        // check horizontal line
-//        boolean isLeftFree = false;
-//        boolean isRightFree = false;
-//        int num_horizontal = 1;
-//
-//        // check left
-//        for (int i = 1; i <= 4; i++){
-//            // decrease y, means move left
-//            if (y - i >= 0){
-//                pos = positionToString(x, y - i);
-//                if (aiPositions.contains(pos)){
-//                    num_horizontal++;
-//                }else{
-//                    if (availablePositions.contains(pos)){
-//                        isLeftFree = true;
-//                    }
-//                    break;
-//                }
-//            }else
-//                break;
-//        }
-//        // check right
-//        for (int i = 1; i <= 4; i++){
-//            // increase y, means move to the right
-//            if (y + i < 12){
-//                pos = positionToString(x, y + i);
-//                if (aiPositions.contains(pos)){
-//                    num_horizontal++;
-//                }else{
-//                    if (availablePositions.contains(pos)){
-//                        isRightFree = true;
-//                    }
-//                    break;
-//                }
-//            }else
-//                break;
-//        }
-//        isFrees[1][0] = isLeftFree;
-//        isFrees[1][1] = isRightFree;
-//        counts[1] = num_horizontal;
-//
-//        //diagonal left_up -> right_down
-//        boolean isLeftUpFree = false;
-//        boolean isRightDownFree = false;
-//        int num_diagonal_left_up = 1;
-//        // check left up
-//        for (int i = 1; i <= 4; i++){
-//            if (x - i >= 0 && y - i >= 0){
-//                pos = positionToString(x - i, y - i);
-//                if (aiPositions.contains(pos)){
-//                    num_diagonal_left_up++;
-//                }else{
-//                    if (availablePositions.contains(pos)){
-//                        isLeftUpFree = true;
-//                    }
-//                    break;
-//                }
-//            }else
-//                break;
-//        }
-//        // check right down
-//        for (int i = 1; i <= 4; i++){
-//            if (x + i < 12 && y + i < 12){
-//                pos = positionToString(x + i, y + i);
-//                if (aiPositions.contains(pos)){
-//                    num_diagonal_left_up++;
-//                }else{
-//                    if (availablePositions.contains(pos)){
-//                        isRightDownFree = true;
-//                    }
-//                    break;
-//                }
-//            }else
-//                break;
-//        }
-//        isFrees[2][0] = isLeftUpFree;
-//        isFrees[2][1] = isRightDownFree;
-//        counts[2] = num_diagonal_left_up;
-//
-//        //diagonal right_up -> left_down
-//        boolean isRightUpFree = false;
-//        boolean isLeftDownFree = false;
-//        int num_diagonal_right_up = 1;
-//        // check right up
-//        for (int i = 1; i <= 4; i++){
-//            if (x - i >= 0 && y + i < 12){
-//                pos = positionToString(x - i, y + i);
-//                if (aiPositions.contains(pos)){
-//                    num_diagonal_right_up++;
-//                }else{
-//                    if (availablePositions.contains(pos)){
-//                        isRightUpFree = true;
-//                    }
-//                    break;
-//                }
-//            }else
-//                break;
-//        }
-//        // check left down
-//        for (int i = 1; i <= 4; i++){
-//            if (x + i < 12 && y - i >= 0){
-//                pos = positionToString(x + i, y - i);
-//                if (aiPositions.contains(pos)){
-//                    num_diagonal_right_up++;
-//                }else{
-//                    if (availablePositions.contains(pos)){
-//                        isLeftDownFree = true;
-//                    }
-//                    break;
-//                }
-//            }else
-//                break;
-//        }
-//        isFrees[3][0] = isRightUpFree;
-//        isFrees[3][1] = isLeftDownFree;
-//        counts[3] = num_diagonal_right_up;
-//
-//        // give the score if place the piece in this way
-//        return scoreHelper(isFrees, counts);
-//    }
 }
