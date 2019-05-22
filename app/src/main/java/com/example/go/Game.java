@@ -18,6 +18,7 @@ import android.widget.Toast;
 import java.util.Random;
 
 public class Game extends AppCompatActivity  {
+
     final static int boardSize=12;
     private Context context;
     //Array of cell to draw the board
@@ -103,7 +104,7 @@ public class Game extends AppCompatActivity  {
 
                             String x = "", y = "";
                             if (xmove < 10)
-                                 x = "0" + xmove;
+                                x = "0" + xmove;
                             else x = String.valueOf(xmove);
                             if (ymove < 10)
                                 y = "0" + ymove;
@@ -206,11 +207,11 @@ public class Game extends AppCompatActivity  {
                 player_turn();
             }
         }else if(winner!=0)
-        return;
+            return;
         else
-            {Toast.makeText(context, "Choose another position!", Toast.LENGTH_SHORT).show();
-        //return;
-            }
+        {Toast.makeText(context, "Choose another position!", Toast.LENGTH_SHORT).show();
+            //return;
+        }
 
 
     }
