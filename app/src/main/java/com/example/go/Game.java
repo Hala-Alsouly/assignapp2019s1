@@ -159,8 +159,8 @@ public class Game extends AppCompatActivity  {
         //Toast.makeText(context, "Computer Turn!", Toast.LENGTH_SHORT).show();
         //comment_text.setText("Computer Turn!");
         if (first_move){
-            xmove=new Random().nextInt(boardSize);
-            ymove=new Random().nextInt(boardSize);
+            xmove= boardSize / 2 + new Random().nextInt(3);
+            ymove= boardSize / 2 + new Random().nextInt(3);
             first_move=false;
 
             evaluation.addAiPosition(evaluation.positionToString(xmove, ymove));
