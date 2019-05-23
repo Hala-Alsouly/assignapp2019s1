@@ -15,6 +15,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class Game extends AppCompatActivity  {
@@ -33,6 +35,8 @@ public class Game extends AppCompatActivity  {
     private int player_turn;
     //private boolean isClicked;
     private TextView comment_text;
+    private List<String> record = new ArrayList<>();
+    private FileWR fileR=new FileWR();
 
     private Evaluation evaluation = new Evaluation();
 
@@ -41,6 +45,12 @@ public class Game extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.game_main);
         context=this;
+        //read the file record to modify it later
+        record=fileR.loadBes("record.txt",context);
+        if (record.isEmpty()){
+            record.add("0");
+            record.add("0");
+        }
         Button newGameButten= findViewById(R.id.newGameButten);
         Button backMenuButten=findViewById(R.id.menuButten);
         comment_text=findViewById(R.id.comment_text);
@@ -192,9 +202,17 @@ public class Game extends AppCompatActivity  {
                     if (winner == 1) {
                         Toast.makeText(context, "You Win!", Toast.LENGTH_SHORT).show();
                         comment_text.setText("You Win!");
+                        //update the records file
+                        String w= Integer.toString(Integer.valueOf(record.get(0))+1);
+                        record.set(0,w);
+                        fileR.savebespoke(record,context);
                     } else {
                         Toast.makeText(context, "You Lost!", Toast.LENGTH_SHORT).show();
                         comment_text.setText("You Lost!");
+                        //update the records file
+                        String w= Integer.toString(Integer.valueOf(record.get(1))+1);
+                        record.set(1,w);
+                        fileR.savebespoke(record,context);
                     }
                     return;
                 }
@@ -227,8 +245,7 @@ public class Game extends AppCompatActivity  {
     }
 
     private boolean isWinning() {
-        if(winner!=0)
-            return true;
+
         VectorEnd(xmove,0,0,1,xmove,ymove);
         VectorEnd(0,ymove,1,0,xmove,ymove);
         if(xmove+ymove>=boardSize-1)
@@ -300,12 +317,13 @@ public class Game extends AppCompatActivity  {
     private void start_game() {
         player_turn= new Random().nextInt(2)+1;
         if (player_turn==1){
-            //first_move=false;
+            first_move=false;
             player_turn();
         }
 
         else Ai_turn();
 
     }
+
 
 }

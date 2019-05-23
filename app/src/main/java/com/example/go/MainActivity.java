@@ -13,8 +13,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-
     }
 
     /**
@@ -29,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
     }
     // Allow the gamers to check the previous game records
     public void onClick_CheckRecords(View v){
-        Intent intent = new Intent(MainActivity.this, CheckRecords.class);
+        Intent intent = new Intent(MainActivity.this, GameRecord.class);
         startActivity(intent);
     }
 }
