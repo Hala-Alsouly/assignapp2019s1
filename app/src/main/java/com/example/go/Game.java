@@ -244,8 +244,7 @@ public class Game extends AppCompatActivity  {
     }
 
     private boolean isWinning() {
-        if(winner!=0)
-            return true;
+
         VectorEnd(xmove,0,0,1,xmove,ymove);
         VectorEnd(0,ymove,1,0,xmove,ymove);
         if(xmove+ymove>=boardSize-1)
@@ -317,7 +316,7 @@ public class Game extends AppCompatActivity  {
     private void start_game() {
         player_turn= new Random().nextInt(2)+1;
         if (player_turn==1){
-            //first_move=false;
+            first_move=false;
             player_turn();
         }
 
