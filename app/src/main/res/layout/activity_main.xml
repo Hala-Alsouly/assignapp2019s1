@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/BurlyWood"
     tools:context=".MainActivity">
 
     <TextView
@@ -12,6 +13,8 @@
         android:layout_height="wrap_content"
         android:text="Go Game"
         android:textSize="30dp"
+        android:textStyle="bold"
+        android:textColor="@color/SaddleBrown"
         android:textAllCaps="false"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="250dp"
@@ -33,6 +36,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
+            android:background="@color/SaddleBrown"
             android:onClick="onClick_VsCom"/>
         <Button
             android:id="@+id/btn_VsPlayer"
@@ -41,6 +45,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
+            android:background="@color/SaddleBrown"
             android:onClick="onClick_VsPlayer"/>
         <Button
             android:id="@+id/btn_CheckRecords"
@@ -49,6 +54,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
+            android:background="@color/SaddleBrown"
             android:onClick="onClick_CheckRecords"/>
 
     </LinearLayout>
