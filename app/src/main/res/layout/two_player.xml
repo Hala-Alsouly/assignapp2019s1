@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/w3"
     tools:context=".Game">
 
     <LinearLayout
@@ -24,7 +25,8 @@
                 android:textSize="18sp"
                 android:gravity="center"
                 android:layout_weight="1"
-                android:background="@color/SaddleBrown" />
+                android:textColor="@color/DarkGray"
+                android:background="@color/Black" />
             <Button
                 android:id="@+id/menuButten"
                 android:layout_width="match_parent"
@@ -34,8 +36,8 @@
                 android:textSize="18sp"
                 android:gravity="center"
                 android:layout_weight="1"
-
-                android:background="@color/SaddleBrown" />
+                android:textColor="@color/DarkGray"
+                android:background="@color/Black" />
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -74,7 +76,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:background="@color/BurlyWood"
         android:layout_below="@+id/topContent"
         >
 
