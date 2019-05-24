@@ -12,7 +12,7 @@ import java.util.Set;
  *      \
  *      \
  *      \ y
- *      
+ *
  *      pay attention, that's how coordinate sysyem set previously
  *      so all methods are written accordingly
  */
@@ -23,7 +23,6 @@ public class Evaluation {
     private Set<String> availablePositions = new HashSet<>();
     private Set<String> playerPositions = new HashSet<>();
     private Set<String> aiPositions = new HashSet<>();
-    private enum Direction{Horizontal, Vertical, Diagonal_LeftUp, Diagonal_RightUp}
 
     String pattern_50000 = "00000"; // 01
     String pattern_4320 = "+0000+"; //02
@@ -40,67 +39,7 @@ public class Evaluation {
     String pattern_120_02 = "++0+0+"; //13
     String pattern_120_03 = "+0+0++";  //14
     String pattern_20_01 = "+++0++"; // 15
-    String pattern_20_02 = "++0+++";// 16
-
-
-
-
-
-    private int scoreHelper(boolean[][] isFrees, int[] counts){
-        int num_All5 = 0;
-        int num_Free4 = 0;
-        int num_Sleep4 = 0;
-        int num_Free3 = 0;
-        int num_Sleep3 = 0;
-        int num_Free2 = 0;
-        int num_Sleep2 = 0;
-        int num_Free1 = 0;
-        int num_Sleep1 = 0;
-        for (int i = 0; i < 4; i++){
-            int count = counts[i];
-            boolean isFree_0 = isFrees[i][0];
-            boolean isFree_1 = isFrees[i][1];
-            if (count == 5)
-                num_All5++;
-            else if (count == 4){
-                if (isFree_0 && isFree_1)
-                    num_Free4++;
-                else
-                    num_Sleep4++;
-            }
-            else if (count == 3){
-                if (isFree_0 && isFree_1)
-                    num_Free3++;
-                else
-                    num_Sleep3++;
-            }
-            else if (count == 2){
-                if (isFree_0 && isFree_1)
-                    num_Free2++;
-                else
-                    num_Sleep2++;
-            }
-            else if (count == 1){
-                if (isFree_0 && isFree_1)
-                    num_Free1++;
-                else
-                    num_Sleep1++;
-            }
-        }
-        if (num_All5 != 0)
-            return 10000;
-        else if (num_Free4 >= 1 || num_Sleep4 >= 2 || (num_Sleep4 >= 1 && num_Free3 >= 1))
-            return 1000;
-        else if (num_Free3 >= 1 || num_Sleep3 >= 2 || (num_Sleep3 >= 1 && num_Free2 >= 1))
-            return 100;
-        else if (num_Free2 >= 1 || num_Sleep2 >= 2 || (num_Sleep1 >= 1 && num_Free1 >= 1))
-            return 10;
-        else if (num_Free1 >= 1)
-            return 1;
-        return 0;
-    }
-
-
+    String pattern_20_02 = "++0+++";// 1
 
     // Constructor, it should contain all positions at the beginning
     public Evaluation(){
@@ -478,24 +417,6 @@ public class Evaluation {
 
         return max_position;
     }
-
-
-//    public String maximize(int current_depth, int alpha, int beta,
-//                           HashSet<String> avail_pos, HashSet<String> ai_pos, HashSet<String> player_pos){
-//        int value;
-//        for (String position : avail_pos){
-//            value = scoreCalculator()
-//        }
-//    }
-//
-//    public String minimize(int current_depth, int alpha, int beta,
-//                           HashSet<String> avail_pos, HashSet<String> ai_pos, HashSet<String> player_pos){
-//        int min_value = Integer.MIN_VALUE;
-//        for (String position : avail_pos){
-//            min_value =
-//        }
-//
-//    }
 
 
 
