@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
-import android.media.SoundPool;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
@@ -19,7 +18,6 @@ import android.widget.Toast;
 import android.view.animation.AnimationUtils;
 import android.view.animation.ScaleAnimation;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -58,6 +56,9 @@ public class Game extends AppCompatActivity  {
     private boolean isAIMode = true;
     public static final String KEY_MODE_AI = "MODE_AI";
     private MediaPlayer mp;
+    //counter for number of bomb used
+    private int playerOneBomb;
+    private int playerTowBomb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,8 +112,21 @@ public class Game extends AppCompatActivity  {
         btnBomb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                isBomb = true;
-                btnBomb.setBackgroundResource(R.drawable.shape_radius_bg_red);
+                if (player_turn==1){
+                    if (playerOneBomb<3){
+                        isBomb = true;
+                        btnBomb.setBackgroundResource(R.drawable.shape_radius_bg_red);
+                        playerOneBomb++;
+                    }else Toast.makeText(context, "You are out of bombs!", Toast.LENGTH_SHORT).show();
+
+                }else{
+                    if (playerTowBomb<3) {
+                        isBomb = true;
+                        btnBomb.setBackgroundResource(R.drawable.shape_radius_bg_red);
+                        playerTowBomb++;
+                    }else Toast.makeText(context, "You are out of bombs!", Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
 
@@ -135,9 +149,9 @@ public class Game extends AppCompatActivity  {
     private void BoardGame(){
         //Get the cell size depends on screen size
         int cellSize=Math.round(ScreenWidth()/boardSize);
-        //the size of the row which is a linearLayout
+        //Setting the size of the linearLayout
         LinearLayout.LayoutParams lnrow=new LinearLayout.LayoutParams(cellSize*boardSize, cellSize);
-        //the size of the cell will be a linear layout
+        //the size of the cell setting to be a size of linear layout
         LinearLayout.LayoutParams lnCell=new LinearLayout.LayoutParams(cellSize, cellSize);
         LinearLayout lBoeardGame=(LinearLayout)findViewById(R.id.boardGame);
 
@@ -253,6 +267,8 @@ public class Game extends AppCompatActivity  {
                 ivCell[0][0].postDelayed(new Runnable() {
                     @Override
                     public void run() {
+                        //Start the sound
+                        mp.start();
                         Toast.makeText(context, "Bomb!", Toast.LENGTH_SHORT).show();
                         for (int i = xmove-1; i < xmove + 2; i++) {
                             for (int j = ymove -1; j < ymove + 2; j++) {
@@ -261,8 +277,6 @@ public class Game extends AppCompatActivity  {
                                 evaluation.addAvailablePosition(evaluation.positionToString(i,j));
                             }
                         }
-                        //Start the sound
-                        mp.start();
                         btnBomb.setBackgroundResource(R.drawable.shape_radius_bg_gray);
                         //set the delay
                         ivCell[0][0].postDelayed(new Runnable() {
@@ -377,7 +391,7 @@ public class Game extends AppCompatActivity  {
             j+=vy;
         }
         while (true){
-            System.out.println(st);
+            System.out.println("i "+i+" j "+j);
             st += String.valueOf(valueCell[i][j]);
             if (st.length()==5){
                 EvalEnd(st);
@@ -415,6 +429,8 @@ public class Game extends AppCompatActivity  {
     //randomly choose the first player if AI mode, for two-player mode,
     // the first player is assigned black stone
     private void start_game() {
+        playerOneBomb=0;
+        playerTowBomb=0;
         if (isAIMode){
             player_turn= new Random().nextInt(2)+1;
             if (player_turn==1){
