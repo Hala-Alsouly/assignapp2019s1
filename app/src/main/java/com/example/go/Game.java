@@ -37,16 +37,21 @@ public class Game extends AppCompatActivity  {
     private int winner;
     private boolean first_move;
     private int xmove, ymove;
+    //indicate the current turn, 1 indicates the first player or the human player,
+    // 2 for the computer or the second player
     private int player_turn;
     //private boolean isClicked;
     private TextView tvPlayerOne;
     private TextView tvPlayerTwo;
+    //the button to decide whether the bomb is activated
     private Button btnBomb;
     private List<String> record = new ArrayList<>();
     private FileWR fileR=new FileWR();
 
     private Evaluation evaluation = new Evaluation();
+    //True if bomb is activated
     private boolean isBomb;
+    //control the two Modes
     private boolean isAIMode = true;
     public static final String KEY_MODE_AI = "MODE_AI";
     private MediaPlayer mp;
@@ -57,6 +62,7 @@ public class Game extends AppCompatActivity  {
         setContentView(R.layout.game_main);
         //sound from https://taira-komori.jpn.org/arms01tw.html
         mp=MediaPlayer.create(this, R.raw.bomb);
+        //the value of isAIMode is assigned according to the information in intent(the selection of the player)
         if (getIntent() != null){
             isAIMode = getIntent().getBooleanExtra(KEY_MODE_AI,true);
         }
@@ -70,8 +76,10 @@ public class Game extends AppCompatActivity  {
         }
         Button newGameButten= findViewById(R.id.newGameButten);
         Button backMenuButten=findViewById(R.id.menuButten);
+        //two textviews to tell the turn of the player
         tvPlayerOne =findViewById(R.id.playerOne_text);
         tvPlayerTwo =findViewById(R.id.playerTwo_text);
+        //if is AI mode, the second textview is not required
         if (isAIMode){
             tvPlayerTwo.setVisibility(View.GONE);
         }
@@ -94,6 +102,7 @@ public class Game extends AppCompatActivity  {
                                           }
         );
         btnBomb = findViewById(R.id.btn_bomb);
+        //set up the onClickListener for the bomb button, if it is pressed, the bomb is activated
         btnBomb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -183,7 +192,7 @@ public class Game extends AppCompatActivity  {
         }
     }
 
-
+    //manage the turn of players and the corresponding textviews
     private void player_turn(){
         if (isAIMode) tvPlayerOne.setText("Your Turn!");
         else{
@@ -223,8 +232,9 @@ public class Game extends AppCompatActivity  {
     //Set movement
     private void move(){
 
-
+        //for available positions
         if (valueCell[xmove][ymove]==0 && winner==0) {
+            //consider the bomb case
             if (isBomb){
                 isBomb = false;
 
@@ -242,9 +252,10 @@ public class Game extends AppCompatActivity  {
                                 evaluation.addAvailablePosition(evaluation.positionToString(i,j));
                             }
                         }
+                        //Start the sound
                         mp.start();
                         btnBomb.setBackgroundResource(R.drawable.shape_radius_bg_gray);
-
+                        //set the delay
                         ivCell[0][0].postDelayed(new Runnable() {
                             @Override
                             public void run() {
@@ -267,6 +278,7 @@ public class Game extends AppCompatActivity  {
 
 
     }
+    //check the state of the game, change the turn and manage the toast message
     private void checkAndTurn() {
         if (isBoardFull()) {
             Toast.makeText(context, "Draw!", Toast.LENGTH_SHORT).show();
@@ -387,7 +399,8 @@ public class Game extends AppCompatActivity  {
 
         return(i-xbelow)*(i-xabove)<=0;
     }
-    //randomly choose the first player
+    //randomly choose the first player if AI mode, for two-player mode,
+    // the first player is assigned black stone
     private void start_game() {
         if (isAIMode){
             player_turn= new Random().nextInt(2)+1;
