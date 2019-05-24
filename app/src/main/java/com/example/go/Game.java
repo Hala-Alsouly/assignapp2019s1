@@ -287,6 +287,8 @@ public class Game extends AppCompatActivity  {
             if (isWinning()) {
                 if (winner == 1) {
                     String hint = "You Win!";
+                    record.set(0,Integer.toString(Integer.valueOf(record.get(0))+1));
+                    fileR.savebespoke(record,context);
                     if (!isAIMode){
                         hint = "Player One Win!";
                         tvPlayerTwo.setText("Player Two Lost!");
@@ -295,6 +297,8 @@ public class Game extends AppCompatActivity  {
                     tvPlayerOne.setText(hint);
                 } else {
                     String hint = "Player One Lost!";
+                    record.set(1,Integer.toString(Integer.valueOf(record.get(1))+1));
+                    fileR.savebespoke(record,context);
                     if (isAIMode){
                         hint = "You Lost!";
                         Toast.makeText(context, hint, Toast.LENGTH_SHORT).show();
@@ -414,6 +418,5 @@ public class Game extends AppCompatActivity  {
         }
 
     }
-
 
 }
