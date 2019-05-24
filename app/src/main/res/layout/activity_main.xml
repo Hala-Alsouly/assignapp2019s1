@@ -31,7 +31,7 @@
 
         <Button
             android:id="@+id/btn_VsCom"
-            android:text="VS Com"
+            android:text="One Player"
             android:textAllCaps="false"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -41,7 +41,7 @@
             android:onClick="onClick_VsCom"/>
         <Button
             android:id="@+id/btn_VsPlayer"
-            android:text="VS Player"
+            android:text="Two Players"
             android:textAllCaps="false"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -51,7 +51,7 @@
             android:onClick="onClick_VsPlayer"/>
         <Button
             android:id="@+id/btn_CheckRecords"
-            android:text="Records"
+            android:text="Record"
             android:textAllCaps="false"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
