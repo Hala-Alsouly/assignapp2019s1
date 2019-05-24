@@ -23,7 +23,6 @@ public class Evaluation {
     private Set<String> availablePositions = new HashSet<>();
     private Set<String> playerPositions = new HashSet<>();
     private Set<String> aiPositions = new HashSet<>();
-    private enum Direction{Horizontal, Vertical, Diagonal_LeftUp, Diagonal_RightUp}
 
     String pattern_50000 = "00000"; // 01
     String pattern_4320 = "+0000+"; //02
