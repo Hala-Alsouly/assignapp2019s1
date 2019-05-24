@@ -73,7 +73,7 @@ public class Game extends AppCompatActivity  {
         context=this;
         bombIcon = context.getResources().getDrawable(R.drawable.bomb);
         border=context.getResources().getDrawable(R.drawable.border);
-        border=context.getResources().getDrawable(R.drawable.borderless);
+        borderless=context.getResources().getDrawable(R.drawable.borderless);
         //read the file record to modify it later
         record=fileR.loadBes("record.txt",context);
         if (record.isEmpty()){
@@ -426,7 +426,7 @@ public class Game extends AppCompatActivity  {
             return false;
         return true;
     }
-    //winning state
+    //set the winner number if it is a winning state
     private void EvalEnd(String st) {
         if (st.contains("11111"))
             winner=1;
