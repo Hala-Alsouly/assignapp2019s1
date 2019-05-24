@@ -53,6 +53,7 @@
                 android:textAllCaps="false"
                 android:textStyle="bold"
                 android:layout_centerHorizontal="true"
+                android:textColor="@color/White"
                 />
             <TextView
                 android:id="@+id/text_winsRecodr"
@@ -63,6 +64,7 @@
                 android:textAllCaps="false"
                 android:textStyle="bold"
                 android:layout_centerHorizontal="true"
+                android:textColor="@color/White"
                 />
         </LinearLayout>
         <LinearLayout
@@ -78,6 +80,7 @@
                 android:textAllCaps="false"
                 android:textStyle="bold"
                 android:layout_centerHorizontal="true"
+                android:textColor="@color/White"
                 />
             <TextView
                 android:id="@+id/text_lostRecord"
@@ -88,6 +91,7 @@
                 android:textAllCaps="false"
                 android:textStyle="bold"
                 android:layout_centerHorizontal="true"
+                android:textColor="@color/White"
                 />
         </LinearLayout>
 
