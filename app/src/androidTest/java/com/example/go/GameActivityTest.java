@@ -39,7 +39,7 @@ public class GameActivityTest {
     @Test
     public void gameActivityTest() {
         ViewInteraction appCompatButton = onView(
-                allOf(withId(R.id.btn_VsCom), withText("VS Com"),
+                allOf(withId(R.id.btn_VsCom), withText("One Player"),
                         childAtPosition(
                                 allOf(withId(R.id.layout_Buttons),
                                         childAtPosition(

@@ -40,7 +40,7 @@ public class GameActivityBombTest {
     @Test
     public void gameActivityBombTest() {
         ViewInteraction appCompatButton = onView(
-                allOf(withId(R.id.btn_VsCom), withText("VS Com"),
+                allOf(withId(R.id.btn_VsCom), withText("One Player"),
                         childAtPosition(
                                 allOf(withId(R.id.layout_Buttons),
                                         childAtPosition(
@@ -60,7 +60,7 @@ public class GameActivityBombTest {
         imageView.perform(click());
 
         ViewInteraction appCompatButton2 = onView(
-                allOf(withId(R.id.btn_bomb), withText("bomb"),
+                allOf(withId(R.id.btn_bomb), withText("Bomb"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),

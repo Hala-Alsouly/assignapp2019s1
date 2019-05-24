@@ -31,36 +31,48 @@ public class Game extends AppCompatActivity  {
     //Array to place the drawable (background board, placments)
     private Drawable[] drawCell=new Drawable[4] ;
     private Drawable bombIcon;
+    //Two rectangles to show the player turn
+    private Drawable border;
+    private Drawable borderless;
 
     //Save the values for all players
     private int[][] valueCell=new int[boardSize][boardSize] ;
     private int winner;
     private boolean first_move;
     private int xmove, ymove;
+    //indicate the current turn, 1 indicates the first player or the human player,
+    // 2 for the computer or the second player
     private int player_turn;
-    //private boolean isClicked;
     private TextView tvPlayerOne;
     private TextView tvPlayerTwo;
+    //the button to decide whether the bomb is activated
     private Button btnBomb;
+    //List to save the retrieved data from the file
     private List<String> record = new ArrayList<>();
     private FileWR fileR=new FileWR();
 
     private Evaluation evaluation = new Evaluation();
+    //True if bomb is activated
     private boolean isBomb;
+    //control the two Modes
     private boolean isAIMode = true;
     public static final String KEY_MODE_AI = "MODE_AI";
-    SoundPool soundPool;
-    HashMap<Integer,Integer> musicManage=new HashMap<>();
+    private MediaPlayer mp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.game_main);
+        //sound from https://taira-komori.jpn.org/arms01tw.html
+        mp=MediaPlayer.create(this, R.raw.bomb);
+        //the value of isAIMode is assigned according to the information in intent(the selection of the player)
         if (getIntent() != null){
             isAIMode = getIntent().getBooleanExtra(KEY_MODE_AI,true);
         }
         context=this;
         bombIcon = context.getResources().getDrawable(R.drawable.bomb);
+        border=context.getResources().getDrawable(R.drawable.border);
+        border=context.getResources().getDrawable(R.drawable.borderless);
         //read the file record to modify it later
         record=fileR.loadBes("record.txt",context);
         if (record.isEmpty()){
@@ -69,8 +81,10 @@ public class Game extends AppCompatActivity  {
         }
         Button newGameButten= findViewById(R.id.newGameButten);
         Button backMenuButten=findViewById(R.id.menuButten);
+        //two textviews to tell the turn of the player
         tvPlayerOne =findViewById(R.id.playerOne_text);
         tvPlayerTwo =findViewById(R.id.playerTwo_text);
+        //if is AI mode, the second textview is not required
         if (isAIMode){
             tvPlayerTwo.setVisibility(View.GONE);
         }
@@ -93,6 +107,7 @@ public class Game extends AppCompatActivity  {
                                           }
         );
         btnBomb = findViewById(R.id.btn_bomb);
+        //set up the onClickListener for the bomb button, if it is pressed, the bomb is activated
         btnBomb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -100,8 +115,7 @@ public class Game extends AppCompatActivity  {
                 btnBomb.setBackgroundResource(R.drawable.shape_radius_bg_red);
             }
         });
-        soundPool=new SoundPool(3,0,5);
-        musicManage.put(1,soundPool.load(this,R.raw.bomb,1));
+
         loadResources();
         BoardGame();
         //Start a new game
@@ -183,16 +197,20 @@ public class Game extends AppCompatActivity  {
         }
     }
 
-
+    //manage the turn of players and the corresponding textviews
     private void player_turn(){
         if (isAIMode) tvPlayerOne.setText("Your Turn!");
         else{
             if (player_turn == 1){
                 tvPlayerOne.setText("Player One Turn!");
-                tvPlayerTwo.setText("Player Two");
+                tvPlayerTwo.setText("");
+                tvPlayerOne.setBackground(border);
+                tvPlayerTwo.setBackground(borderless);
             } else {
-                tvPlayerOne.setText("Player One");
+                tvPlayerOne.setText("");
                 tvPlayerTwo.setText("Player Two Turn!");
+                tvPlayerTwo.setBackground(border);
+                tvPlayerOne.setBackground(borderless);
             }
         }
     }
@@ -223,16 +241,15 @@ public class Game extends AppCompatActivity  {
     //Set movement
     private void move(){
 
-
+        //for available positions
         if (valueCell[xmove][ymove]==0 && winner==0) {
+            //consider the bomb case
             if (isBomb){
                 isBomb = false;
 
                 ivCell[xmove][ymove].setImageDrawable(bombIcon);
                 ScaleAnimation scaleAnimation = (ScaleAnimation) AnimationUtils.loadAnimation(this, R.anim.bomb);
                 ivCell[xmove][ymove].startAnimation(scaleAnimation);
-
-
                 ivCell[0][0].postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -244,9 +261,10 @@ public class Game extends AppCompatActivity  {
                                 evaluation.addAvailablePosition(evaluation.positionToString(i,j));
                             }
                         }
-                        //soundPool.play(musicManage.get(0),1,1,0,0,1);
+                        //Start the sound
+                        mp.start();
                         btnBomb.setBackgroundResource(R.drawable.shape_radius_bg_gray);
-
+                        //set the delay
                         ivCell[0][0].postDelayed(new Runnable() {
                             @Override
                             public void run() {
@@ -269,6 +287,7 @@ public class Game extends AppCompatActivity  {
 
 
     }
+    //check the state of the game, change the turn and manage the toast message
     private void checkAndTurn() {
         if (isBoardFull()) {
             Toast.makeText(context, "Draw!", Toast.LENGTH_SHORT).show();
@@ -277,6 +296,8 @@ public class Game extends AppCompatActivity  {
             if (isWinning()) {
                 if (winner == 1) {
                     String hint = "You Win!";
+                    record.set(0,Integer.toString(Integer.valueOf(record.get(0))+1));
+                    fileR.savebespoke(record,context);
                     if (!isAIMode){
                         hint = "Player One Win!";
                         tvPlayerTwo.setText("Player Two Lost!");
@@ -285,6 +306,8 @@ public class Game extends AppCompatActivity  {
                     tvPlayerOne.setText(hint);
                 } else {
                     String hint = "Player One Lost!";
+                    record.set(1,Integer.toString(Integer.valueOf(record.get(1))+1));
+                    fileR.savebespoke(record,context);
                     if (isAIMode){
                         hint = "You Lost!";
                         Toast.makeText(context, hint, Toast.LENGTH_SHORT).show();
@@ -389,7 +412,8 @@ public class Game extends AppCompatActivity  {
 
         return(i-xbelow)*(i-xabove)<=0;
     }
-    //randomly choose the first player
+    //randomly choose the first player if AI mode, for two-player mode,
+    // the first player is assigned black stone
     private void start_game() {
         if (isAIMode){
             player_turn= new Random().nextInt(2)+1;
@@ -403,6 +427,5 @@ public class Game extends AppCompatActivity  {
         }
 
     }
-
 
 }
