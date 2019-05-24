@@ -52,6 +52,7 @@
                 android:textSize="25dp"
                 android:textAllCaps="false"
                 android:textStyle="bold"
+                android:textColor="@color/BurlyWood"
                 android:layout_centerHorizontal="true"
                 />
             <TextView
@@ -62,6 +63,7 @@
                 android:textSize="25dp"
                 android:textAllCaps="false"
                 android:textStyle="bold"
+                android:textColor="@color/BurlyWood"
                 android:layout_centerHorizontal="true"
                 />
         </LinearLayout>
@@ -77,6 +79,7 @@
                 android:textSize="25dp"
                 android:textAllCaps="false"
                 android:textStyle="bold"
+                android:textColor="@color/BurlyWood"
                 android:layout_centerHorizontal="true"
                 />
             <TextView
@@ -87,6 +90,7 @@
                 android:textSize="25dp"
                 android:textAllCaps="false"
                 android:textStyle="bold"
+                android:textColor="@color/BurlyWood"
                 android:layout_centerHorizontal="true"
                 />
         </LinearLayout>
