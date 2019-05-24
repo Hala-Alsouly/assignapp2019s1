@@ -4,11 +4,12 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/gomoku_icon"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/gomoku_icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <!-- The icon from https://www.kisspng.com/png-xiangqi-chess-gomoku-tablero-de-juego-chinese-ches-287896/-->
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

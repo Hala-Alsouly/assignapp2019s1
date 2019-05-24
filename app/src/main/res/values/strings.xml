@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Go</string>
+    <string name="instruction">Players taking turn to place black and white stones on the board, and
+        whoever has 5 stones in a row first (horizontally, vertically, or diagonally) wins the game.
+        If the bomb stone is placed on the board, the surrounding placed stones will blow up (vanish).
+        The bomb stone can be activated by pressing the button "Bomb"</string>
 </resources>
