@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
+import android.media.SoundPool;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
@@ -18,6 +19,7 @@ import android.widget.Toast;
 import android.view.animation.AnimationUtils;
 import android.view.animation.ScaleAnimation;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -47,6 +49,8 @@ public class Game extends AppCompatActivity  {
     private boolean isBomb;
     private boolean isAIMode = true;
     public static final String KEY_MODE_AI = "MODE_AI";
+    SoundPool soundPool;
+    HashMap<Integer,Integer> musicManage=new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,6 +100,8 @@ public class Game extends AppCompatActivity  {
                 btnBomb.setBackgroundResource(R.drawable.shape_radius_bg_red);
             }
         });
+        soundPool=new SoundPool(3,0,5);
+        musicManage.put(1,soundPool.load(this,R.raw.bomb,1));
         loadResources();
         BoardGame();
         //Start a new game
@@ -226,6 +232,7 @@ public class Game extends AppCompatActivity  {
                 ScaleAnimation scaleAnimation = (ScaleAnimation) AnimationUtils.loadAnimation(this, R.anim.bomb);
                 ivCell[xmove][ymove].startAnimation(scaleAnimation);
 
+
                 ivCell[0][0].postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -237,6 +244,7 @@ public class Game extends AppCompatActivity  {
                                 evaluation.addAvailablePosition(evaluation.positionToString(i,j));
                             }
                         }
+                        //soundPool.play(musicManage.get(0),1,1,0,0,1);
                         btnBomb.setBackgroundResource(R.drawable.shape_radius_bg_gray);
 
                         ivCell[0][0].postDelayed(new Runnable() {
