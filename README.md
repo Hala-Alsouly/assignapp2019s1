@@ -12,7 +12,7 @@ _Add a paragraph the gives a summary of the app you implemented. Include a small
 
 ## Design Documentation 
 + [Design Summary](designsummary)
-+ [Testing Summary](testingsummary)
++ [Testing Summary](TestingSummary)
 
 ## Minuted Meetings
 + [Meeting 1 - 09/04/2019 - decide team structure and app](meetingMinute1.pdf)
