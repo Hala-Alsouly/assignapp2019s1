@@ -90,9 +90,17 @@ public class Evaluation {
         return aiPositions;
     }
 
-
+    /**
+     * The heuristic function
+     * @param position the position that will place a piece in next step
+     * @param me Ai or player
+     * @param other player or Ai
+     * @return the max move from Ai
+     */
 
     public int scoreCalculator(String position, Set me, Set other){
+        // Check the 4 lines in four directions
+        // According to the status, generate the string which represent the pattern
         int x = Integer.parseInt(position.substring(0, 2));
         int y = Integer.parseInt(position.substring(2, 4));
         String vertical = "";
@@ -265,6 +273,10 @@ public class Evaluation {
         String[] lines = {horizontal, vertical, diagonal_left_up, diagonal_right_up};
         String[] lines_other = {horizontal_other, vertical_other, diagonal_left_up_other, diagonal_right_up_other};
         int score = 0;
+        /**
+         * Calculate how much benefit will gain if Ai place its place to attack for winning
+         * The winning pattern will be the largest number
+         */
         for (String line : lines){
             if (line.contains(pattern_50000)){
                 score += 50000;
@@ -331,6 +343,10 @@ public class Evaluation {
                 continue;
             }
         }
+        /**
+         * Calculate how much benefit will gain if Ai place its place to defend player from winning
+         * The winning pattern of player will be the second largest number
+         */
         for (String line : lines_other){
             if (line.contains(pattern_50000)){
                 score += 10000;
@@ -401,7 +417,10 @@ public class Evaluation {
     }
 
 
-
+    /**
+     * check every available position, choose the one with the best score
+     * @return
+     */
     public String choosePositionForAi(){
         int maxScore = Integer.MIN_VALUE;
         int currentScore = 0;
@@ -419,7 +438,10 @@ public class Evaluation {
     }
 
 
-
+    /**
+     * A tool to transfer the integer to the String representation of the position
+     * @return The position String
+     */
     public String positionToString(int x, int y){
         String xx = "", yy = "";
         if (x < 10)
