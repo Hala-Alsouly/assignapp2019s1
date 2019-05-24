@@ -41,6 +41,9 @@ _reference all the code or ideas for code from other sources_
 
 ### Assets 
 
-_this includes images, sounds, etc._
+_Sound from sound from https://taira-komori.jpn.org/arms01tw.html.
+_Icon from https://www.kisspng.com/png-xiangqi-chess-gomoku-tablero-de-juego-chinese-ches-287896/ 
+_Background from https://www.pinterest.com.au/pin/562809284665166685/
+
 
 
