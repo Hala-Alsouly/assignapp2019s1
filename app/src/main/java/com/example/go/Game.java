@@ -31,6 +31,9 @@ public class Game extends AppCompatActivity  {
     //Array to place the drawable (background board, placments)
     private Drawable[] drawCell=new Drawable[4] ;
     private Drawable bombIcon;
+    //Two rectangles to show the player turn
+    private Drawable border;
+    private Drawable borderless;
 
     //Save the values for all players
     private int[][] valueCell=new int[boardSize][boardSize] ;
@@ -40,11 +43,11 @@ public class Game extends AppCompatActivity  {
     //indicate the current turn, 1 indicates the first player or the human player,
     // 2 for the computer or the second player
     private int player_turn;
-    //private boolean isClicked;
     private TextView tvPlayerOne;
     private TextView tvPlayerTwo;
     //the button to decide whether the bomb is activated
     private Button btnBomb;
+    //List to save the retrieved data from the file
     private List<String> record = new ArrayList<>();
     private FileWR fileR=new FileWR();
 
@@ -68,6 +71,8 @@ public class Game extends AppCompatActivity  {
         }
         context=this;
         bombIcon = context.getResources().getDrawable(R.drawable.bomb);
+        border=context.getResources().getDrawable(R.drawable.border);
+        border=context.getResources().getDrawable(R.drawable.borderless);
         //read the file record to modify it later
         record=fileR.loadBes("record.txt",context);
         if (record.isEmpty()){
@@ -198,10 +203,14 @@ public class Game extends AppCompatActivity  {
         else{
             if (player_turn == 1){
                 tvPlayerOne.setText("Player One Turn!");
-                tvPlayerTwo.setText("Player Two");
+                tvPlayerTwo.setText("");
+                tvPlayerOne.setBackground(border);
+                tvPlayerTwo.setBackground(borderless);
             } else {
-                tvPlayerOne.setText("Player One");
+                tvPlayerOne.setText("");
                 tvPlayerTwo.setText("Player Two Turn!");
+                tvPlayerTwo.setBackground(border);
+                tvPlayerOne.setBackground(borderless);
             }
         }
     }
