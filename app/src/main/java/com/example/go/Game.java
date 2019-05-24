@@ -314,12 +314,12 @@ public class Game extends AppCompatActivity  {
                     fileR.savebespoke(record,context);
                     if (!isAIMode){
                         hint = "Player One Win!";
-                        tvPlayerTwo.setText("Player Two Lost!");
+                        //tvPlayerTwo.setText("Player Two Lost!");
                     }
                     Toast.makeText(context, hint, Toast.LENGTH_SHORT).show();
                     tvPlayerOne.setText(hint);
                 } else {
-                    String hint = "Player One Lost!";
+                    String hint = "";
                     record.set(1,Integer.toString(Integer.valueOf(record.get(1))+1));
                     fileR.savebespoke(record,context);
                     if (isAIMode){
@@ -358,53 +358,66 @@ public class Game extends AppCompatActivity  {
     //it will check all vectors
     private boolean isWinning() {
 
-        VectorEnd(xmove,0,0,1,xmove,ymove);
-        VectorEnd(0,ymove,1,0,xmove,ymove);
-        if(xmove+ymove>=boardSize-1)
-            VectorEnd(boardSize-1,xmove+ymove-boardSize+1,-1,1,xmove,ymove);
-        else VectorEnd(xmove+ymove,0,-1,1,xmove,ymove);
-
-        if(xmove<=ymove)
-            VectorEnd(xmove-ymove+boardSize-1,boardSize-1,-1,-1,xmove,ymove);
-        else VectorEnd(boardSize-1,boardSize-1-(xmove-ymove),-1,-1,xmove,ymove);
-
+        EvalRow(xmove,ymove);
+        EvalVertical(xmove,ymove);
+        EvalDiognal1(xmove,ymove);
+        EvalDiognal2(xmove,ymove);
         if(winner!=0)
             return true;
         else return false;
 
     }
-    //check the provided vector to see if it is a winning state
-    private void VectorEnd(int xx, int yy, int vx, int vy, int rx, int ry) {
-        //check the row based on vector(vx,vy)
-        if(winner!=0)
-            return;
-        int i,j;
-        int xbelow=rx-4*vx;
-        int ybelow=ry-4*vy;
-        int xabove=rx+4*vx;
-        int yabove=ry+4*vy;
-        String st="";
-        i=xx;
-        j=yy;
-        while (!inside(i,xbelow,xabove) || !inside(j,ybelow,yabove)){
-            i+=vx;
-            j+=vy;
+    //check the row if it is contains a winning state
+    private void EvalRow(int x,int y){
+        String s="";
+        for (int i=y-4;i<y+4;i++){
+            if (inBoard(x, i))
+                s+=valueCell[x][i];
         }
-        while (true){
-            System.out.println("i "+i+" j "+j);
-            st += String.valueOf(valueCell[i][j]);
-            if (st.length()==5){
-                EvalEnd(st);
-                st=st.substring(1,5);
+        EvalEnd(s);
+    }
 
-            }
-            i+=vx;
-            j+=vy;
-            if(!inBoard(i,j)|| !inside(i,xbelow,xabove) || !inside(j,ybelow,yabove)||winner!=0){
-                break;
-            }
+    //check the vertical if it is contains a winning state
+    private void EvalVertical(int x, int y){
+        String s="";
+        for(int i=x-4;i<y+4;i++)
+            if (inBoard(i,y))
+                s+=valueCell[i][y];
+        EvalEnd(s);
+    }
+
+    //check diagonal if it is contain a winning state from upper right to down left
+    private void EvalDiognal1(int x, int y){
+        String s="";
+        int i=x;
+        int j=y;
+        while (inBoard(i, j)){
+            s+=valueCell[i--][j--];
         }
+        s= new StringBuffer(s).reverse().toString();
+        i=x+1;
+        j=y+1;
+        while (inBoard(i, j)){
+            s+=valueCell[i++][j++];
+        }
+        EvalEnd(s);
+    }
 
+    //check diagonal if it is contain a winning state from upper left to down right
+    private void EvalDiognal2(int x, int y){
+        String s="";
+        int i=x;
+        int j=y;
+        while (inBoard(i, j)){
+            s+=valueCell[i--][j++];
+        }
+        s= new StringBuffer(s).reverse().toString();
+        i=x+1;
+        j=y-1;
+        while (inBoard(i, j)){
+            s+=valueCell[i++][j--];
+        }
+        EvalEnd(s);
     }
 
     //to make sure we check only inside the board
@@ -415,11 +428,10 @@ public class Game extends AppCompatActivity  {
     }
     //winning state
     private void EvalEnd(String st) {
-        switch (st){
-            case "11111":winner=1; break;
-            case "22222":winner=2;break;
-            default:break;
-        }
+        if (st.contains("11111"))
+            winner=1;
+        else if (st.contains("22222"))
+            winner=2;
     }
 
     private boolean inside(int i, int xbelow, int xabove) {
