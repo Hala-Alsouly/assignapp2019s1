@@ -49,13 +49,14 @@ public class Game extends AppCompatActivity  {
     private boolean isBomb;
     private boolean isAIMode = true;
     public static final String KEY_MODE_AI = "MODE_AI";
-    SoundPool soundPool;
-    HashMap<Integer,Integer> musicManage=new HashMap<>();
+    private MediaPlayer mp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.game_main);
+        //sound from https://taira-komori.jpn.org/arms01tw.html
+        mp=MediaPlayer.create(this, R.raw.bomb);
         if (getIntent() != null){
             isAIMode = getIntent().getBooleanExtra(KEY_MODE_AI,true);
         }
@@ -100,8 +101,7 @@ public class Game extends AppCompatActivity  {
                 btnBomb.setBackgroundResource(R.drawable.shape_radius_bg_red);
             }
         });
-        soundPool=new SoundPool(3,0,5);
-        musicManage.put(1,soundPool.load(this,R.raw.bomb,1));
+
         loadResources();
         BoardGame();
         //Start a new game
@@ -231,8 +231,6 @@ public class Game extends AppCompatActivity  {
                 ivCell[xmove][ymove].setImageDrawable(bombIcon);
                 ScaleAnimation scaleAnimation = (ScaleAnimation) AnimationUtils.loadAnimation(this, R.anim.bomb);
                 ivCell[xmove][ymove].startAnimation(scaleAnimation);
-
-
                 ivCell[0][0].postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -244,7 +242,7 @@ public class Game extends AppCompatActivity  {
                                 evaluation.addAvailablePosition(evaluation.positionToString(i,j));
                             }
                         }
-                        //soundPool.play(musicManage.get(0),1,1,0,0,1);
+                        mp.start();
                         btnBomb.setBackgroundResource(R.drawable.shape_radius_bg_gray);
 
                         ivCell[0][0].postDelayed(new Runnable() {
