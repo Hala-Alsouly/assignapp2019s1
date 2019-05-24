@@ -4,9 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/w3"
+    android:background="@drawable/background"
     tools:context=".MainActivity">
-
+    <!--The background from https://www.pinterest.com.au/pin/562809284665166685/-->
     <TextView
         android:id="@+id/text_title"
         android:layout_width="wrap_content"

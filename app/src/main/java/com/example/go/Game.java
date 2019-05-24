@@ -14,7 +14,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import android.view.animation.AnimationUtils;
+import android.view.animation.ScaleAnimation;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -26,6 +27,8 @@ public class Game extends AppCompatActivity  {
     private ImageView[][] ivCell= new ImageView[boardSize][boardSize] ;
     //Array to place the drawable (background board, placments)
     private Drawable[] drawCell=new Drawable[4] ;
+    private Drawable bombIcon;
+
     //Save the values for all players
     private int[][] valueCell=new int[boardSize][boardSize] ;
     private int winner;
@@ -33,17 +36,26 @@ public class Game extends AppCompatActivity  {
     private int xmove, ymove;
     private int player_turn;
     //private boolean isClicked;
-    private TextView comment_text;
+    private TextView tvPlayerOne;
+    private TextView tvPlayerTwo;
+    private Button btnBomb;
     private List<String> record = new ArrayList<>();
     private FileWR fileR=new FileWR();
 
     private Evaluation evaluation = new Evaluation();
+    private boolean isBomb;
+    private boolean isAIMode = true;
+    public static final String KEY_MODE_AI = "MODE_AI";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.game_main);
+        if (getIntent() != null){
+            isAIMode = getIntent().getBooleanExtra(KEY_MODE_AI,true);
+        }
         context=this;
+        bombIcon = context.getResources().getDrawable(R.drawable.bomb);
         //read the file record to modify it later
         record=fileR.loadBes("record.txt",context);
         if (record.isEmpty()){
@@ -52,7 +64,11 @@ public class Game extends AppCompatActivity  {
         }
         Button newGameButten= findViewById(R.id.newGameButten);
         Button backMenuButten=findViewById(R.id.menuButten);
-        comment_text=findViewById(R.id.comment_text);
+        tvPlayerOne =findViewById(R.id.playerOne_text);
+        tvPlayerTwo =findViewById(R.id.playerTwo_text);
+        if (isAIMode){
+            tvPlayerTwo.setVisibility(View.GONE);
+        }
         newGameButten.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -60,7 +76,7 @@ public class Game extends AppCompatActivity  {
                 initialize_board();
                 evaluation = new Evaluation();
                 start_game();
-                comment_text.setText("");
+//                tvPlayerOne.setText("");
             }
         });
         backMenuButten.setOnClickListener(new View.OnClickListener() {
@@ -71,6 +87,14 @@ public class Game extends AppCompatActivity  {
                                               }
                                           }
         );
+        btnBomb = findViewById(R.id.btn_bomb);
+        btnBomb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isBomb = true;
+                btnBomb.setBackgroundResource(R.drawable.shape_radius_bg_red);
+            }
+        });
         loadResources();
         BoardGame();
         //Start a new game
@@ -78,6 +102,7 @@ public class Game extends AppCompatActivity  {
         start_game();
 
     }
+
     //Set board contents
     private void loadResources(){
         drawCell[0]=context.getResources().getDrawable(R.drawable.cell);//background
@@ -106,27 +131,22 @@ public class Game extends AppCompatActivity  {
                 ivCell[i][j].setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (player_turn==1){
+                        //if (player_turn==1){
                             xmove=x;
                             ymove=y;
+                            String curPosition = evaluation.positionToString(xmove,ymove);
 
+                            if (evaluation.getAvailablePositions().contains(curPosition)){
 
-                            String x = "", y = "";
-                            if (xmove < 10)
-                                 x = "0" + xmove;
-                            else x = String.valueOf(xmove);
-                            if (ymove < 10)
-                                y = "0" + ymove;
-                            else y = String.valueOf(ymove);
-                            if (evaluation.getAvailablePositions().contains(x+y)){
-                                evaluation.addPlayerPosition(x + y);
+                                String x = "", y = "";
+                                evaluation.addPlayerPosition(curPosition);
                                 Log.i("counts", "player size: " + evaluation.getPlayerPositions().size());
                                 Log.i("counts", "all size: " + evaluation.getAvailablePositions().size());
                             }
 
                             move();
                         }
-                    }
+                    //}
                 });
                 //add each cell to the view
                 linRow.addView(ivCell[i][j],lnCell);
@@ -158,10 +178,16 @@ public class Game extends AppCompatActivity  {
 
 
     private void player_turn(){
-        //Toast.makeText(context, "Your Turn!", Toast.LENGTH_SHORT).show();
-        comment_text.setText("Your Turn!");
-        //isClicked=false;
-
+        if (isAIMode) tvPlayerOne.setText("Your Turn!");
+        else{
+            if (player_turn == 1){
+                tvPlayerOne.setText("Player One Turn!");
+                tvPlayerTwo.setText("Player Two");
+            } else {
+                tvPlayerOne.setText("Player One");
+                tvPlayerTwo.setText("Player Two Turn!");
+            }
+        }
     }
 
     //AI player
@@ -190,49 +216,89 @@ public class Game extends AppCompatActivity  {
     //Set movement
     private void move(){
 
+
         if (valueCell[xmove][ymove]==0 && winner==0) {
-            ivCell[xmove][ymove].setImageDrawable(drawCell[player_turn]);
-            valueCell[xmove][ymove] = player_turn;
-            if (isBoardFull()) {
-                Toast.makeText(context, "Draw!", Toast.LENGTH_SHORT).show();
-                return;
-            } else {
-                if (isWinning()) {
-                    if (winner == 1) {
-                        Toast.makeText(context, "You Win!", Toast.LENGTH_SHORT).show();
-                        comment_text.setText("You Win!");
-                        //update the records file
-                        String w= Integer.toString(Integer.valueOf(record.get(0))+1);
-                        record.set(0,w);
-                        fileR.savebespoke(record,context);
-                    } else {
-                        Toast.makeText(context, "You Lost!", Toast.LENGTH_SHORT).show();
-                        comment_text.setText("You Lost!");
-                        //update the records file
-                        String w= Integer.toString(Integer.valueOf(record.get(1))+1);
-                        record.set(1,w);
-                        fileR.savebespoke(record,context);
+            if (isBomb){
+                isBomb = false;
+
+                ivCell[xmove][ymove].setImageDrawable(bombIcon);
+                ScaleAnimation scaleAnimation = (ScaleAnimation) AnimationUtils.loadAnimation(this, R.anim.bomb);
+                ivCell[xmove][ymove].startAnimation(scaleAnimation);
+
+                ivCell[0][0].postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(context, "Bomb!", Toast.LENGTH_SHORT).show();
+                        for (int i = xmove-1; i < xmove + 2; i++) {
+                            for (int j = ymove -1; j < ymove + 2; j++) {
+                                ivCell[i][j].setImageDrawable(drawCell[0]);
+                                valueCell[i][j] = 0;
+                                evaluation.addAvailablePosition(evaluation.positionToString(i,j));
+                            }
+                        }
+                        btnBomb.setBackgroundResource(R.drawable.shape_radius_bg_gray);
+
+                        ivCell[0][0].postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                checkAndTurn();
+                            }
+                        },1100);
                     }
-                    return;
-                }
-            }
-            if (player_turn == 1) {
-                player_turn = 2;
-                Ai_turn();
-            } else  {
-                player_turn = 1;
-                player_turn();
+                },500);
+            }else {
+                ivCell[xmove][ymove].setImageDrawable(drawCell[player_turn]);
+                valueCell[xmove][ymove] = player_turn;
+                checkAndTurn();
             }
         }else if(winner!=0)
-        return;
+            return;
         else
-            {Toast.makeText(context, "Choose another position!", Toast.LENGTH_SHORT).show();
-        //return;
-            }
+        {Toast.makeText(context, "Choose another position!", Toast.LENGTH_SHORT).show();
+            //return;
+        }
 
 
     }
+    private void checkAndTurn() {
+        if (isBoardFull()) {
+            Toast.makeText(context, "Draw!", Toast.LENGTH_SHORT).show();
+            return;
+        } else {
+            if (isWinning()) {
+                if (winner == 1) {
+                    String hint = "You Win!";
+                    if (!isAIMode){
+                        hint = "Player One Win!";
+                        tvPlayerTwo.setText("Player Two Lost!");
+                    }
+                    Toast.makeText(context, hint, Toast.LENGTH_SHORT).show();
+                    tvPlayerOne.setText(hint);
+                } else {
+                    String hint = "Player One Lost!";
+                    if (isAIMode){
+                        hint = "You Lost!";
+                        Toast.makeText(context, hint, Toast.LENGTH_SHORT).show();
+                    }else {
+                        tvPlayerTwo.setText("Player Two Win!");
+                        Toast.makeText(context, "Player Two Win!", Toast.LENGTH_SHORT).show();
+                    }
+                    tvPlayerOne.setText(hint);
+                }
+                return;
+            }
+        }
+        if (player_turn == 1) {
+            player_turn = 2;
+            if (isAIMode) Ai_turn();
+            else player_turn();
+        } else  {
+            player_turn = 1;
+            player_turn();
+        }
+    }
 
+    //return true if there is no empty space on the board
     private boolean isBoardFull() {
         for (int i = 0; i < boardSize; i++) {
             for (int j = 0; j < boardSize; j++) {
@@ -242,7 +308,8 @@ public class Game extends AppCompatActivity  {
         }
         return true;
     }
-
+    //check the winning state and return true when someone win
+    //it will check all vectors
     private boolean isWinning() {
 
         VectorEnd(xmove,0,0,1,xmove,ymove);
@@ -260,7 +327,7 @@ public class Game extends AppCompatActivity  {
         else return false;
 
     }
-
+    //check the provided vector to see if it is a winning state
     private void VectorEnd(int xx, int yy, int vx, int vy, int rx, int ry) {
         //check the row based on vector(vx,vy)
         if(winner!=0)
@@ -294,12 +361,13 @@ public class Game extends AppCompatActivity  {
 
     }
 
+    //to make sure we check only inside the board
     private boolean inBoard(int i, int j) {
         if (i<0 || i>=boardSize || j<0 ||j>=boardSize)
             return false;
         return true;
     }
-
+    //winning state
     private void EvalEnd(String st) {
         switch (st){
             case "11111":winner=1; break;
@@ -312,15 +380,18 @@ public class Game extends AppCompatActivity  {
 
         return(i-xbelow)*(i-xabove)<=0;
     }
-
+    //randomly choose the first player
     private void start_game() {
-        player_turn= new Random().nextInt(2)+1;
-        if (player_turn==1){
-            first_move=false;
+        if (isAIMode){
+            player_turn= new Random().nextInt(2)+1;
+            if (player_turn==1){
+                first_move=false;
+                player_turn();
+            } else Ai_turn();
+        }else {
+            player_turn = 1;
             player_turn();
         }
-
-        else Ai_turn();
 
     }
 

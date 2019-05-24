@@ -23,7 +23,9 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
     public void onClick_VsPlayer(View v){
-
+        Intent intent = new Intent(MainActivity.this, Game.class);
+        intent.putExtra(Game.KEY_MODE_AI,false);
+        startActivity(intent);
     }
     // Allow the gamers to check the previous game records
     public void onClick_CheckRecords(View v){
