@@ -56,13 +56,12 @@
                 android:textSize="25dp"
                 android:textAllCaps="false"
                 android:textStyle="bold"
-                android:textColor="@color/BurlyWood"
                 android:shadowColor="@color/Black"
                 android:shadowDx="1.5"
                 android:shadowDy="1.5"
                 android:shadowRadius="2"
                 android:layout_centerHorizontal="true"
-                android:textColor="@color/White"
+                android:textColor="@color/Ivory"
                 />
             <TextView
                 android:id="@+id/text_winsRecodr"
@@ -72,13 +71,12 @@
                 android:textSize="25dp"
                 android:textAllCaps="false"
                 android:textStyle="bold"
-                android:textColor="@color/BurlyWood"
                 android:shadowColor="@color/Black"
                 android:shadowDx="1.5"
                 android:shadowDy="1.5"
                 android:shadowRadius="2"
                 android:layout_centerHorizontal="true"
-                android:textColor="@color/White"
+                android:textColor="@color/Ivory"
                 />
         </LinearLayout>
         <LinearLayout
@@ -93,13 +91,12 @@
                 android:textSize="25dp"
                 android:textAllCaps="false"
                 android:textStyle="bold"
-                android:textColor="@color/BurlyWood"
                 android:shadowColor="@color/Black"
                 android:shadowDx="1.5"
                 android:shadowDy="1.5"
                 android:shadowRadius="2"
                 android:layout_centerHorizontal="true"
-                android:textColor="@color/White"
+                android:textColor="@color/Ivory"
                 />
             <TextView
                 android:id="@+id/text_lostRecord"
@@ -109,13 +106,12 @@
                 android:textSize="25dp"
                 android:textAllCaps="false"
                 android:textStyle="bold"
-                android:textColor="@color/BurlyWood"
                 android:shadowColor="@color/Black"
                 android:shadowDx="1.5"
                 android:shadowDy="1.5"
                 android:shadowRadius="2"
                 android:layout_centerHorizontal="true"
-                android:textColor="@color/White"
+                android:textColor="@color/Ivory"
                 />
         </LinearLayout>
 
