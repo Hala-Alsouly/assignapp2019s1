@@ -62,6 +62,7 @@
                 android:shadowDy="1.5"
                 android:shadowRadius="2"
                 android:layout_centerHorizontal="true"
+                android:textColor="@color/White"
                 />
             <TextView
                 android:id="@+id/text_winsRecodr"
@@ -77,6 +78,7 @@
                 android:shadowDy="1.5"
                 android:shadowRadius="2"
                 android:layout_centerHorizontal="true"
+                android:textColor="@color/White"
                 />
         </LinearLayout>
         <LinearLayout
@@ -97,6 +99,7 @@
                 android:shadowDy="1.5"
                 android:shadowRadius="2"
                 android:layout_centerHorizontal="true"
+                android:textColor="@color/White"
                 />
             <TextView
                 android:id="@+id/text_lostRecord"
@@ -112,6 +115,7 @@
                 android:shadowDy="1.5"
                 android:shadowRadius="2"
                 android:layout_centerHorizontal="true"
+                android:textColor="@color/White"
                 />
         </LinearLayout>
 
