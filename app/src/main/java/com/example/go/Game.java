@@ -380,7 +380,7 @@ public class Game extends AppCompatActivity  {
     //check the vertical if it is contains a winning state
     private void EvalVertical(int x, int y){
         String s="";
-        for(int i=x-4;i<y+4;i++)
+        for(int i=x-4;i<x+4;i++)
             if (inBoard(i,y))
                 s+=valueCell[i][y];
         EvalEnd(s);
